@@ -61,7 +61,7 @@ public class MatrixFromFile {
             for (int j = 0; j < matrix[i].length; j++) {
                 System.out.print(matrix[i][j]);
             }
-            System.out.println(); // Pular linha após cada linha da matriz
+            System.out.println(); 
         }
     }
 }
