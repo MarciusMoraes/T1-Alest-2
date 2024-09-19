@@ -9,7 +9,7 @@ public class MatrixFromFile {
     public static char[][] matrix;
 
     public static void main(String[] args) {
-        String filePath = args[0];
+        String filePath = "casoe90.txt";
 
         try {
             //Método para ler o arquivo e retornar a matriz
@@ -47,7 +47,7 @@ public class MatrixFromFile {
         reader.close();
 
         for(int i=0;i<cols;i++){
-            if (matrix[rows-1][i]!=' ') {
+            if (matrix[rows-1][i]=='W' || matrix[rows-1][i]=='|' || matrix[rows-1][i]=='V' ) {
                 initialPos=i;
                 break;
             }
@@ -65,10 +65,16 @@ public class MatrixFromFile {
     
     public static int maxSum(int horiPosition,int verPosition, char direction){
         int sum=0;
+        if (horiPosition < 0 || horiPosition >= matrix[0].length || verPosition < 0 || verPosition >= matrix.length) {
+            return 0;
+        }        
         switch (matrix[verPosition][horiPosition]) {
             case '#':
                 return 0;
-                
+
+            case ' ':
+                return 0;    
+
             case '/':
                 return maxSum(horiPosition + 1, verPosition - 1, '/');
 
@@ -76,15 +82,23 @@ public class MatrixFromFile {
                 return maxSum( horiPosition - 1, verPosition - 1, '\\');
 
             case '|':
+                if (direction=='\\') {
+                    return maxSum( horiPosition - 1, verPosition - 1, '\\');  
+                }
+                if (direction=='/') {
+                    return maxSum(horiPosition + 1, verPosition - 1, '/');  
+                }
                 return maxSum(horiPosition , verPosition - 1, '|');
+
             case 'V':
-                return Math.max(maxSum(horiPosition + 1, verPosition - 1, '/'),
-                maxSum( horiPosition - 1, verPosition - 1, '\\'));    
+                return Math.max(maxSum (horiPosition, verPosition - 1, '|'),
+                Math.max(maxSum( horiPosition + 1, verPosition - 1, '/'),
+                maxSum( horiPosition - 1, verPosition - 1, '\\')));    
+
             case 'W': 
                 return Math.max(maxSum (horiPosition, verPosition - 1, '|'),
                 Math.max(maxSum( horiPosition + 1, verPosition - 1, '/'),
                 maxSum( horiPosition - 1, verPosition - 1, '\\')));
-            
             default:
                 switch (direction) {
                     case '/':
