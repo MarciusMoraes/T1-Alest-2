@@ -8,48 +8,44 @@ import java.io.IOException;
 public class MatrixFromFile {
     public static char[][] matrix;
 
-    public static void main(String[] args) {
-        String filePath = "casoe90.txt";
-
-        try {
-            matrix = readPatternFromFile(filePath);
-
-        } catch (IOException e) {
-            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
-        }
-    }
+        public static void main(String[] args) {
+            String filePath = "casoe90.txt";
+            
+            
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(filePath));
     
-    public static char[][] readPatternFromFile(String filePath) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        
-        // Ler o número de linhas e colunas
-        String[] dimensions = reader.readLine().split(" ");
-        int rows = Integer.parseInt(dimensions[0]);  
-        int cols = Integer.parseInt(dimensions[1]);  
-        int initialPos= 0;
-
-        matrix = new char[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            String line = reader.readLine();
-            for (int j = 0; j < line.length(); j++) {
-                matrix[i][j] = line.charAt(j);
+                // Ler o número de linhas e colunas
+                String[] dimensions = reader.readLine().split(" ");
+                int rows = Integer.parseInt(dimensions[0]);
+                int cols = Integer.parseInt(dimensions[1]);
+                int initialPos = 0;
+    
+                matrix = new char[rows][cols];
+    
+                for (int i = 0; i < rows; i++) {
+                    String line = reader.readLine();
+                    for (int j = 0; j < line.length(); j++) {
+                        matrix[i][j] = line.charAt(j);
+                    }
+                }
+    
+                reader.close();
+    
+                for (int i = 0; i < cols; i++) {
+                    if (matrix[rows - 1][i] == 'W' || matrix[rows - 1][i] == '|' || matrix[rows - 1][i] == 'V') {
+                        initialPos = i;
+                        break;
+                    }
+                }
+    
+                // Exemplo de chamada para maxSum
+                System.out.println(maxSum(initialPos, rows - 1, matrix[rows - 1][initialPos]));
+    
+            } catch (IOException e) {
+                System.out.println("Erro ao ler o arquivo: " + e.getMessage());
             }
         }
-
-        reader.close();
-
-        for(int i=0;i<cols;i++){
-            if (matrix[rows-1][i]=='W' || matrix[rows-1][i]=='|' || matrix[rows-1][i]=='V' ) {
-                initialPos=i;
-                break;
-            }
-        }
-      
-        System.out.println(maxSum(initialPos, rows-1, matrix[rows-1][initialPos]));
-
-        return matrix;
-    }
 
     
     public static int maxSum(int horiPosition,int verPosition, char direction){
